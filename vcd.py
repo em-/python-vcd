@@ -17,7 +17,7 @@ section = Group(Suppress('$') + word.setResultsName('name') + SkipTo('$end').set
 time = Suppress(Literal('#')) + Word(nums).setResultsName('time')
 
 std_logic = oneOf('U X 0 1 Z W L H-').setResultsName('std_logic')
-std_logic_vector = Group(Literal('b').setResultsName('encoding') + Word('UX01ZWLH-').setResultsName('values')).setResultsName('std_logic_vector')
+std_logic_vector = Word('b', 'UX01ZWLH-').setResultsName('std_logic_vector')
 value = (Group(std_logic + signal_id) | Group(std_logic_vector + signal_id)).setResultsName('value')
 
 change = Group(time + ZeroOrMore(value)).setResultsName('change')
