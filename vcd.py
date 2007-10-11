@@ -13,26 +13,26 @@ if len(sys.argv) != 2:
 s = Suppress
 g = Group
 
-type = Word(alphas).setResultsName('type')
-size = Word(nums).setResultsName('size')
-id = Word(printables).setResultsName('id')
-name = Word(printables).setResultsName('name')
+type = Word(alphas)('type')
+size = Word(nums)('size')
+id = Word(printables)('id')
+name = Word(printables)('name')
 
 definition = type + size + id + name
-signal = g(s('$var') + definition + s('$end')).setResultsName('signal')
+signal = g(s('$var') + definition + s('$end'))('signal')
 
-content = SkipTo('$end').setResultsName('content') + s('$end')
-section_name = Word(alphas).setResultsName('name')
-section = g(s('$') + section_name + content).setResultsName('section')
+content = SkipTo('$end')('content') + s('$end')
+section_name = Word(alphas)('name')
+section = g(s('$') + section_name + content)('section')
 
-time = s('#') + Word(nums).setResultsName('time')
+time = s('#') + Word(nums)('time')
 
-std_logic = oneOf('U X 0 1 Z W L H-').setResultsName('std_logic')
-std_logic_vector = Word('b', 'UX01ZWLH-').setResultsName('std_logic_vector')
-value = g(std_logic + id) | g(std_logic_vector + id).setResultsName('value')
+std_logic = oneOf('U X 0 1 Z W L H-')('std_logic')
+std_logic_vector = Word('b', 'UX01ZWLH-')('std_logic_vector')
+value = g(std_logic + id) | g(std_logic_vector + id)('value')
 
-change = g(time + ZeroOrMore(value)).setResultsName('change')
+change = g(time + ZeroOrMore(value))('change')
 
-vcd = (ZeroOrMore(signal | section) + ZeroOrMore(change)).setResultsName('vcd')
+vcd = (ZeroOrMore(signal | section) + ZeroOrMore(change))('vcd')
 
 print vcd.parseFile(sys.argv[1]).asXML()
