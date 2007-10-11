@@ -12,8 +12,10 @@ if len(sys.argv) != 2:
 
 s = Suppress
 
+identifier = Word(printables)('id') 
+
 definition = Word(alphas)('type') + Word(nums)('size') + \
-             Word(printables)('id') + Word(printables)('name')
+             identifier + Word(printables)('name')
 
 signal     = Group(s('$var') + definition + s('$end'))('signal')
 
@@ -33,11 +35,11 @@ time = s('#') + Word(nums)('time')
 std_logic        = oneOf('U X 0 1 Z W L H-')('std_logic')
 std_logic_vector = Word('b', 'UX01ZWLH-')('std_logic_vector')
 
-value  = (Group(std_logic + id) | Group(std_logic_vector + id))('value')
-change = Group(time + ZeroOrMore(value))('change')
+value  = (Group(std_logic + identifier) | Group(std_logic_vector + identifier))('value')
+step   = Group(time + ZeroOrMore(value))('step')
 
 headers = signal | timescale | scope | upscope
-changes = enddefinitions + ZeroOrMore(change) + StringEnd()
+changes = enddefinitions + ZeroOrMore(step) + StringEnd()
 
 vcd = ZeroOrMore(headers | changes | section)('vcd')
 
