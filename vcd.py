@@ -18,8 +18,7 @@ definition = Word(alphas)('type') + Word(nums)('size') + \
 signal     = Group(s('$var') + definition + s('$end'))('signal')
 
 content      = SkipTo('$end')('content') + s('$end')
-section_name = Word(alphas)('name')
-section      = Group(s('$') + section_name + content)('section')
+section      = Group(s('$') + Word(alphas)('name') + content)('section')
 
 unit      = s('1') + oneOf('s ms ns us ps fs')
 timescale = (s('$timescale') + unit + s('$end'))('timescale')
