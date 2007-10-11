@@ -35,7 +35,7 @@ time = s('#') + Word(nums)('time')
 std_logic        = oneOf('U X 0 1 Z W L H-')('std_logic')
 std_logic_vector = Word('b', 'UX01ZWLH-')('std_logic_vector')
 
-value  = (Group(std_logic + identifier) | Group(std_logic_vector + identifier))('value')
+value  = Group((std_logic | std_logic_vector ) + identifier)('value')
 step   = Group(time + ZeroOrMore(value))('step')
 
 headers = signal | timescale | scope | upscope
