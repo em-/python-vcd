@@ -29,7 +29,7 @@ time = s('#') + Word(nums)('time')
 std_logic        = oneOf('U X 0 1 Z W L H-')('std_logic')
 std_logic_vector = Word('b', 'UX01ZWLH-')('std_logic_vector')
 
-value  = Group(std_logic + id) | Group(std_logic_vector + id)('value')
+value  = (Group(std_logic + id) | Group(std_logic_vector + id))('value')
 change = Group(time + ZeroOrMore(value))('change')
 
 vcd = (ZeroOrMore(signal | section) + ZeroOrMore(change))('vcd')
