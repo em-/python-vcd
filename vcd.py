@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-from pyparsing import (Word, Group, SkipTo, Literal,
+from pyparsing import (Word, Group, SkipTo,
                        Suppress, ZeroOrMore,
                        alphas, nums, printables,
                        oneOf)
@@ -16,13 +16,13 @@ id = Word(printables).setResultsName('id')
 name = Word(printables).setResultsName('name')
 
 signal_definition = type + size + id + name
-signal = (Group(Suppress('$') + Suppress(Literal('var')) + signal_definition + Suppress('$end'))).setResultsName('signal')
+signal = (Group(Suppress('$') + Suppress('var') + signal_definition + Suppress('$end'))).setResultsName('signal')
 
 content = SkipTo('$end').setResultsName('content') + Suppress('$end')
 section_name = Word(alphas).setResultsName('name')
 section = Group(Suppress('$') + section_name + content).setResultsName('section')
 
-time = Suppress(Literal('#')) + Word(nums).setResultsName('time')
+time = Suppress('#') + Word(nums).setResultsName('time')
 
 std_logic = oneOf('U X 0 1 Z W L H-').setResultsName('std_logic')
 std_logic_vector = Word('b', 'UX01ZWLH-').setResultsName('std_logic_vector')
