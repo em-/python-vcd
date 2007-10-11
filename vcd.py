@@ -12,7 +12,7 @@ signal = Group(Suppress('$') + Literal('var') + signal_definition + Suppress('$e
 section = Group(Suppress('$') + Word(alphas) + SkipTo('$end') + Suppress('$end'))
 
 time = Suppress(Literal('#')) + Word(nums)
-change = Group(time + ZeroOrMore(Word(alphanums) + Word(printables)))
+change = Group(time + ZeroOrMore(Group(Word(alphanums) + Word(printables))))
 
 vcd = ZeroOrMore(signal | section) + ZeroOrMore(change)
 
