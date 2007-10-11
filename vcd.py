@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-from pyparsing import (Word, Group, SkipTo,
+from pyparsing import (Word, Group, SkipTo, StringEnd,
                        Suppress, ZeroOrMore,
                        alphas, nums, printables,
                        oneOf)
@@ -34,8 +34,8 @@ std_logic_vector = Word('b', 'UX01ZWLH-')('std_logic_vector')
 value  = (Group(std_logic + id) | Group(std_logic_vector + id))('value')
 change = Group(time + ZeroOrMore(value))('change')
 
-headers = signal | enddefinitions | section 
+changes = enddefinitions + ZeroOrMore(change) + StringEnd()
 
-vcd = (ZeroOrMore(headers) + ZeroOrMore(change))('vcd')
+vcd = ZeroOrMore(signal | changes | section)('vcd')
 
 print vcd.parseFile(sys.argv[1]).asXML()
