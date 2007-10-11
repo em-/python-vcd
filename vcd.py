@@ -1,7 +1,10 @@
 #!/usr/bin/python
 
 import sys
-from pyparsing import Word, Group, SkipTo, Literal, Suppress, ZeroOrMore, alphas, nums, alphanums, printables, oneOf
+from pyparsing import (Word, Group, SkipTo, Literal,
+                       Suppress, ZeroOrMore,
+                       alphas, nums, alphanums, printables,
+                       oneOf)
 
 if len(sys.argv) != 2:
     print "Usage: %s FILE" % sys.argv[0]
@@ -11,7 +14,7 @@ word = Word(alphas)
 
 signal_id = Word(printables).setResultsName('identifier')
 signal_definition = word.setResultsName('type') + Word(nums).setResultsName('size') + signal_id + Word(printables).setResultsName('name')
-signal = (Group(Suppress('$') + Literal('var').setResultsName('var') + signal_definition + Suppress('$end'))).setResultsName('signal')
+signal = (Group(Suppress('$') + Suppress(Literal('var')) + signal_definition + Suppress('$end'))).setResultsName('signal')
 section = Group(Suppress('$') + word.setResultsName('name') + SkipTo('$end').setResultsName('content') + Suppress('$end')).setResultsName('section')
 
 time = Suppress(Literal('#')) + Word(nums).setResultsName('time')
