@@ -12,12 +12,9 @@ if len(sys.argv) != 2:
 
 s = Suppress
 
-type = Word(alphas)('type')
-size = Word(nums)('size')
-id   = Word(printables)('id')
-name = Word(printables)('name')
+definition = Word(alphas)('type') + Word(nums)('size') + \
+             Word(printables)('id') + Word(printables)('name')
 
-definition = type + size + id + name
 signal     = Group(s('$var') + definition + s('$end'))('signal')
 
 content      = SkipTo('$end')('content') + s('$end')
