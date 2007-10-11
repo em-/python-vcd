@@ -7,12 +7,13 @@ if len(sys.argv) != 2:
     print "Usage: %s FILE" % sys.argv[0]
     sys.exit(2)
 
-signal_definition = Word(alphas) + Word(nums) + Word(printables) + Word(printables)
+signal_id = Word(printables)
+signal_definition = Word(alphas) + Word(nums) + signal_id + Word(printables)
 signal = Group(Suppress('$') + Literal('var') + signal_definition + Suppress('$end'))
 section = Group(Suppress('$') + Word(alphas) + SkipTo('$end') + Suppress('$end'))
 
 time = Suppress(Literal('#')) + Word(nums)
-change = Group(time + ZeroOrMore(Group(Word(alphanums) + Word(printables))))
+change = Group(time + ZeroOrMore(Group(Word(alphanums) + signal_id)))
 
 vcd = ZeroOrMore(signal | section) + ZeroOrMore(change)
 
