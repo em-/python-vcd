@@ -40,8 +40,9 @@ std_logic_vector = Word('b', 'UX01ZWLH-')('std_logic_vector')
 value  = (Group(std_logic + id) | Group(std_logic_vector + id))('value')
 change = Group(time + ZeroOrMore(value))('change')
 
+headers = signal | timescale | scope | upscope
 changes = enddefinitions + ZeroOrMore(change) + StringEnd()
 
-vcd = ZeroOrMore(signal | timescale | scope | upscope | changes | section)('vcd')
+vcd = ZeroOrMore(headers | changes | section)('vcd')
 
 print vcd.parseFile(sys.argv[1]).asXML()
