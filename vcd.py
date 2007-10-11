@@ -19,7 +19,7 @@ id = Word(printables).setResultsName('id')
 name = Word(printables).setResultsName('name')
 
 signal_definition = type + size + id + name
-signal = (g(s('$var') + signal_definition + s('$end'))).setResultsName('signal')
+signal = g(s('$var') + signal_definition + s('$end')).setResultsName('signal')
 
 content = SkipTo('$end').setResultsName('content') + s('$end')
 section_name = Word(alphas).setResultsName('name')
@@ -29,7 +29,7 @@ time = s('#') + Word(nums).setResultsName('time')
 
 std_logic = oneOf('U X 0 1 Z W L H-').setResultsName('std_logic')
 std_logic_vector = Word('b', 'UX01ZWLH-').setResultsName('std_logic_vector')
-value = (g(std_logic + id) | g(std_logic_vector + id)).setResultsName('value')
+value = g(std_logic + id) | g(std_logic_vector + id).setResultsName('value')
 
 change = g(time + ZeroOrMore(value)).setResultsName('change')
 
