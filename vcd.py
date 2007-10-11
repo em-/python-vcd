@@ -3,7 +3,7 @@
 import sys
 from pyparsing import (Word, Group, SkipTo, Literal,
                        Suppress, ZeroOrMore,
-                       alphas, nums, alphanums, printables,
+                       alphas, nums, printables,
                        oneOf)
 
 if len(sys.argv) != 2:
