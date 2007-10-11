@@ -3,7 +3,7 @@
 import sys
 from pyparsing import (Word, Group, SkipTo, StringEnd,
                        Suppress, ZeroOrMore,
-                       alphas, nums, printables,
+                       alphas, nums, alphanums, printables,
                        oneOf)
 
 if len(sys.argv) != 2:
@@ -24,6 +24,9 @@ content      = SkipTo('$end')('content') + s('$end')
 section_name = Word(alphas)('name')
 section      = Group(s('$') + section_name + content)('section')
 
+scope   = s('$scope module') + Word(alphanums)('scope') + s('$end')
+upscope = Group(s('$upscope') + s(content))('upscope')
+
 enddefinitions = s('$enddefinitions' + content)
 
 time = s('#') + Word(nums)('time')
@@ -36,6 +39,6 @@ change = Group(time + ZeroOrMore(value))('change')
 
 changes = enddefinitions + ZeroOrMore(change) + StringEnd()
 
-vcd = ZeroOrMore(signal | changes | section)('vcd')
+vcd = ZeroOrMore(signal | scope | upscope | changes | section)('vcd')
 
 print vcd.parseFile(sys.argv[1]).asXML()
