@@ -18,8 +18,8 @@ size = Word(nums).setResultsName('size')
 id = Word(printables).setResultsName('id')
 name = Word(printables).setResultsName('name')
 
-signal_definition = type + size + id + name
-signal = g(s('$var') + signal_definition + s('$end')).setResultsName('signal')
+definition = type + size + id + name
+signal = g(s('$var') + definition + s('$end')).setResultsName('signal')
 
 content = SkipTo('$end').setResultsName('content') + s('$end')
 section_name = Word(alphas).setResultsName('name')
