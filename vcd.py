@@ -24,6 +24,9 @@ content      = SkipTo('$end')('content') + s('$end')
 section_name = Word(alphas)('name')
 section      = Group(s('$') + section_name + content)('section')
 
+unit      = s('1') + oneOf('s ms ns us ps fs')
+timescale = (s('$timescale') + unit + s('$end'))('timescale')
+
 scope   = s('$scope module') + Word(alphanums)('scope') + s('$end')
 upscope = Group(s('$upscope') + s(content))('upscope')
 
@@ -39,6 +42,6 @@ change = Group(time + ZeroOrMore(value))('change')
 
 changes = enddefinitions + ZeroOrMore(change) + StringEnd()
 
-vcd = ZeroOrMore(signal | scope | upscope | changes | section)('vcd')
+vcd = ZeroOrMore(signal | timescale | scope | upscope | changes | section)('vcd')
 
 print vcd.parseFile(sys.argv[1]).asXML()
