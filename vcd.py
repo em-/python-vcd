@@ -13,9 +13,17 @@ if len(sys.argv) != 2:
 word = Word(alphas)
 
 signal_id = Word(printables).setResultsName('identifier')
-signal_definition = word.setResultsName('type') + Word(nums).setResultsName('size') + signal_id + Word(printables).setResultsName('name')
+
+type = word.setResultsName('type')
+size = Word(nums).setResultsName('size')
+name = Word(printables).setResultsName('name')
+
+signal_definition = type + size + signal_id + name
 signal = (Group(Suppress('$') + Suppress(Literal('var')) + signal_definition + Suppress('$end'))).setResultsName('signal')
-section = Group(Suppress('$') + word.setResultsName('name') + SkipTo('$end').setResultsName('content') + Suppress('$end')).setResultsName('section')
+
+content = SkipTo('$end').setResultsName('content') + Suppress('$end')
+section_name = word.setResultsName('name')
+section = Group(Suppress('$') + section_name + content).setResultsName('section')
 
 time = Suppress(Literal('#')) + Word(nums).setResultsName('time')
 
