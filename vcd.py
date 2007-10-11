@@ -10,11 +10,9 @@ if len(sys.argv) != 2:
     print "Usage: %s FILE" % sys.argv[0]
     sys.exit(2)
 
-word = Word(alphas)
-
 signal_id = Word(printables).setResultsName('identifier')
 
-type = word.setResultsName('type')
+type = Word(alphas).setResultsName('type')
 size = Word(nums).setResultsName('size')
 name = Word(printables).setResultsName('name')
 
@@ -22,7 +20,7 @@ signal_definition = type + size + signal_id + name
 signal = (Group(Suppress('$') + Suppress(Literal('var')) + signal_definition + Suppress('$end'))).setResultsName('signal')
 
 content = SkipTo('$end').setResultsName('content') + Suppress('$end')
-section_name = word.setResultsName('name')
+section_name = Word(alphas).setResultsName('name')
 section = Group(Suppress('$') + section_name + content).setResultsName('section')
 
 time = Suppress(Literal('#')) + Word(nums).setResultsName('time')
