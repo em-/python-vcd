@@ -10,13 +10,12 @@ if len(sys.argv) != 2:
     print "Usage: %s FILE" % sys.argv[0]
     sys.exit(2)
 
-signal_id = Word(printables).setResultsName('identifier')
-
 type = Word(alphas).setResultsName('type')
 size = Word(nums).setResultsName('size')
+id = Word(printables).setResultsName('id')
 name = Word(printables).setResultsName('name')
 
-signal_definition = type + size + signal_id + name
+signal_definition = type + size + id + name
 signal = (Group(Suppress('$') + Suppress(Literal('var')) + signal_definition + Suppress('$end'))).setResultsName('signal')
 
 content = SkipTo('$end').setResultsName('content') + Suppress('$end')
@@ -27,7 +26,7 @@ time = Suppress(Literal('#')) + Word(nums).setResultsName('time')
 
 std_logic = oneOf('U X 0 1 Z W L H-').setResultsName('std_logic')
 std_logic_vector = Word('b', 'UX01ZWLH-').setResultsName('std_logic_vector')
-value = (Group(std_logic + signal_id) | Group(std_logic_vector + signal_id)).setResultsName('value')
+value = (Group(std_logic + id) | Group(std_logic_vector + id)).setResultsName('value')
 
 change = Group(time + ZeroOrMore(value)).setResultsName('change')
 
