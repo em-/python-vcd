@@ -16,7 +16,7 @@ id = Word(printables).setResultsName('id')
 name = Word(printables).setResultsName('name')
 
 signal_definition = type + size + id + name
-signal = (Group(Suppress('$') + Suppress('var') + signal_definition + Suppress('$end'))).setResultsName('signal')
+signal = (Group(Suppress('$var') + signal_definition + Suppress('$end'))).setResultsName('signal')
 
 content = SkipTo('$end').setResultsName('content') + Suppress('$end')
 section_name = Word(alphas).setResultsName('name')
