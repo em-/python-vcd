@@ -1,0 +1,10 @@
+#!/usr/bin/python
+
+import sys
+from vcd.grammar import vcd
+
+if len(sys.argv) != 2:
+    print "Usage: %s FILE" % sys.argv[0]
+    sys.exit(2)
+
+print vcd.parseFile(sys.argv[1]).asXML()

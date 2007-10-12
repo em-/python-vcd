@@ -6,10 +6,6 @@ from pyparsing import (Word, Group, SkipTo, StringEnd,
                        alphas, nums, alphanums, printables,
                        oneOf)
 
-if len(sys.argv) != 2:
-    print "Usage: %s FILE" % sys.argv[0]
-    sys.exit(2)
-
 s = Suppress
 
 identifier = Word(printables)('id') 
@@ -42,5 +38,3 @@ headers = signal | timescale | scope | upscope
 changes = enddefinitions + ZeroOrMore(step) + StringEnd()
 
 vcd = ZeroOrMore(headers | changes | section)('vcd')
-
-print vcd.parseFile(sys.argv[1]).asXML()
