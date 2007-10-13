@@ -1,0 +1,15 @@
+#!/usr/bin/python
+
+import sys
+from vcd.vcd import Vcd
+
+if len(sys.argv) != 2:
+    print "Usage: %s FILE" % sys.argv[0]
+    sys.exit(2)
+
+v = Vcd(sys.argv[1])
+for signal in v.signals.values():
+    print signal
+    for step in signal.steps:
+        print step
+
