@@ -10,6 +10,15 @@ if len(sys.argv) != 2:
     print "Usage: %s FILE" % sys.argv[0]
     sys.exit(2)
 
+def draw_steps(ctx, signal):
+    steps = [(0, 0), (30, 1), (40, 0), (60, 1)]
+
+    old_value = 0 
+    for time, value in steps:
+        ctx.rel_line_to(time, 0)
+        ctx.rel_line_to(0, 10*(old_value - value))
+        old_value = value
+    ctx.stroke()
 
 surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
 ctx = cairo.Context(surface)
@@ -21,11 +30,18 @@ ctx.paint()
 v = Vcd(sys.argv[1])
 ctx.set_source_rgb (0, 0, 1)
 ctx.translate(0, 10)
+ctx.save()
 for signal in v.signals.values():
     ctx.set_font_size(11)
     ctx.new_path()
     ctx.text_path(signal.reference)
     ctx.fill()
+    ctx.translate(0, 20)
+
+ctx.restore()
+for signal in v.signals.values():
+    ctx.move_to(100, 0)
+    draw_steps(ctx, signal)
     ctx.translate(0, 20)
 
 surface.write_to_png('vcd.png')
