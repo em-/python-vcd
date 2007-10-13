@@ -1,0 +1,32 @@
+#!/usr/bin/python
+
+import sys
+import cairo
+from vcd.vcd import Vcd
+
+WIDTH, HEIGHT = 600, 600
+
+if len(sys.argv) != 2:
+    print "Usage: %s FILE" % sys.argv[0]
+    sys.exit(2)
+
+
+surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
+ctx = cairo.Context(surface)
+
+ctx.set_source_rgb (1, 1, 1)
+ctx.set_operator (cairo.OPERATOR_SOURCE)
+ctx.paint()
+
+v = Vcd(sys.argv[1])
+ctx.set_source_rgb (0, 0, 1)
+ctx.translate(0, 10)
+for signal in v.signals.values():
+    ctx.set_font_size(11)
+    ctx.new_path()
+    ctx.text_path(signal.reference)
+    print signal.reference
+    ctx.fill()
+    ctx.translate(0, 20)
+
+surface.write_to_png('vcd.png')
