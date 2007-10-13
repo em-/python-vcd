@@ -21,7 +21,8 @@ class Vcd(object):
 
         self.signals = {}
         for i in parse_tree:
-            if hasattr(i, 'getName') and i.getName() == 'signal':
+            if not hasattr(i, 'getName'): continue
+            if i.getName() == 'signal':
                 self.signals[i.id] = Signal(i.type, i.size, i.name)
 
         for i in parse_tree:
