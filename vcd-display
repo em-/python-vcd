@@ -6,9 +6,12 @@ from vcd.vcd import Vcd
 
 WIDTH, HEIGHT = 600, 600
 
-if len(sys.argv) != 2:
-    print "Usage: %s FILE" % sys.argv[0]
+if len(sys.argv) != 3:
+    print "Usage: %s INPUT OUTPUT" % sys.argv[0]
     sys.exit(2)
+
+input = sys.argv[1]
+output = sys.argv[2]
 
 def process_steps(steps, total):
     result = []
@@ -77,7 +80,7 @@ ctx.set_source_rgb (1, 1, 1)
 ctx.set_operator (cairo.OPERATOR_SOURCE)
 ctx.paint()
 
-v = Vcd(sys.argv[1])
+v = Vcd(input)
 ctx.set_source_rgb (0, 0, 1)
 ctx.translate(0, 10)
 ctx.save()
@@ -104,4 +107,4 @@ for signal in v.signals.values():
     ctx.restore()
     ctx.translate(0, 20)
 
-surface.write_to_png('vcd.png')
+surface.write_to_png(output)
