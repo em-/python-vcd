@@ -10,8 +10,6 @@ if len(sys.argv) != 2:
     print "Usage: %s FILE" % sys.argv[0]
     sys.exit(2)
 
-steps = [('0', 'U'), ('3000000', '1'), ('4000000', '0'), ('6000000', '1')]
-
 def process_steps(steps):
     result = []
     for i in range(len(steps)-1):
@@ -29,7 +27,7 @@ def process_steps(steps):
 def draw_steps(ctx, signal):
     now  = 0
     ctx.move_to(0,0)
-    for value, duration in process_steps(steps):
+    for value, duration in process_steps(signal.steps):
         if value in ('0', '1'):
             ctx.line_to(now, -10*int(value))
             ctx.rel_line_to(duration, 0)
