@@ -25,7 +25,6 @@ for signal in v.signals.values():
     ctx.set_font_size(11)
     ctx.new_path()
     ctx.text_path(signal.reference)
-    print signal.reference
     ctx.fill()
     ctx.translate(0, 20)
 
