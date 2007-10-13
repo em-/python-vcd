@@ -10,9 +10,9 @@ if len(sys.argv) != 2:
     print "Usage: %s FILE" % sys.argv[0]
     sys.exit(2)
 
-def draw_steps(ctx, signal):
-    steps = [(0, 0), (30, 1), (40, 0), (60, 1)]
+steps = [(0, 0), (30, 1), (40, 0), (60, 1)]
 
+def draw_steps(ctx, signal):
     now  = 0
     ctx.move_to(0,0)
     for time, value in steps:
