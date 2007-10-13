@@ -37,10 +37,21 @@ def draw_steps(ctx, signal):
     now  = 0
     ctx.move_to(0,0)
     for value, duration, previous in process_steps(steps):
-        if value not in (0, 1):
-            value = 0
-        ctx.line_to(now, -10*value)
-        ctx.rel_line_to(duration, 0)
+        if value in (0, 1):
+            ctx.line_to(now, -10*value)
+            ctx.rel_line_to(duration, 0)
+        else:
+            ctx.stroke()
+            x, y = ctx.get_current_point()
+            ctx.move_to(x, 0)
+            ctx.line_to(x+duration, 0)
+            ctx.line_to(x+duration, -10)
+            ctx.line_to(x, -10)
+            ctx.close_path()
+            ctx.fill()
+            ctx.move_to(x, 0)
+            ctx.rel_move_to(duration, 0)
+            ctx.stroke()
         now += duration
     ctx.stroke()
 
