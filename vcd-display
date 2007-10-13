@@ -10,7 +10,7 @@ if len(sys.argv) != 2:
     print "Usage: %s FILE" % sys.argv[0]
     sys.exit(2)
 
-def process_steps(steps):
+def process_steps(steps, total):
     result = []
     for i in range(len(steps)-1):
         value = steps[i][1]
@@ -19,15 +19,16 @@ def process_steps(steps):
         result.append((value, duration))
 
     value = steps[-1][1]
-    duration = 5
+    duration = total - int(steps[-1][0])
+    duration /= 100000
     result.append((value, duration))
     return result
 
 
-def draw_steps_single(ctx, signal):
+def draw_steps_single(ctx, signal, total):
     now  = 0
     ctx.move_to(0,0)
-    for value, duration in process_steps(signal.steps):
+    for value, duration in process_steps(signal.steps, total):
         if value in ('0', '1'):
             ctx.line_to(now, -10*int(value))
             ctx.rel_line_to(duration, 0)
@@ -46,11 +47,11 @@ def draw_steps_single(ctx, signal):
         now += duration
     ctx.stroke()
 
-def draw_steps_register(ctx, signal):
+def draw_steps_register(ctx, signal, total):
     offset = 2.5
     heigth = 10
     ctx.move_to(0, -heigth/2)
-    for value, duration in process_steps(signal.steps):
+    for value, duration in process_steps(signal.steps, total):
         x, y = ctx.get_current_point()
         ctx.line_to(x+offset, -heigth)
         ctx.line_to(x+duration-offset, -heigth)
@@ -81,13 +82,18 @@ for signal in v.signals.values():
     ctx.translate(0, 20)
 
 ctx.restore()
+
+total = 0
+for signal in v.signals.values():
+    total = max([total] + [int(s[0]) for s in signal.steps])
+
 for signal in v.signals.values():
     ctx.save()
     ctx.translate(100, 0)
     if signal.size == 1:
-        draw_steps_single(ctx, signal)
+        draw_steps_single(ctx, signal, total)
     else:
-        draw_steps_register(ctx, signal)
+        draw_steps_register(ctx, signal, total)
     ctx.restore()
     ctx.translate(0, 20)
 
