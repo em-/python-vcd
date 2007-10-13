@@ -35,11 +35,7 @@ def draw_steps_single(ctx, signal, total):
         else:
             ctx.stroke()
             x, y = ctx.get_current_point()
-            ctx.move_to(x, 0)
-            ctx.line_to(x+duration, 0)
-            ctx.line_to(x+duration, -10)
-            ctx.line_to(x, -10)
-            ctx.close_path()
+            ctx.rectangle(x, 0, duration, -10)
             ctx.fill()
             ctx.move_to(x, 0)
             ctx.rel_move_to(duration, 0)
