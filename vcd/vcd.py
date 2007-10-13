@@ -33,7 +33,7 @@ class Vcd(object):
                     current_scope = scope[-1]
                 else:
                     current_scope = None
-                self.signals[i.id] = Signal(i.type, i.size, i.name, current_scope)
+                self.signals[i.id] = Signal(i.type, int(i.size), i.name, current_scope)
 
         for i in parse_tree:
             if hasattr(i, 'getName') and i.getName() == 'step':
