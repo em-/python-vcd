@@ -51,7 +51,8 @@ def draw_steps_register(ctx, signal, total):
     offset = 2.5
     heigth = 10
     ctx.move_to(0, -heigth/2)
-    for value, duration in process_steps(signal.steps, total):
+    steps = process_steps(signal.steps, total)
+    for value, duration in steps[:-1]:
         x, y = ctx.get_current_point()
         ctx.line_to(x+offset, -heigth)
         ctx.line_to(x+duration-offset, -heigth)
@@ -61,6 +62,14 @@ def draw_steps_register(ctx, signal, total):
         ctx.close_path()
         ctx.fill()
         ctx.move_to(x+duration, -heigth/2)
+    value, duration = steps[-1]
+    x, y = ctx.get_current_point()
+    ctx.move_to(x+duration, 0)
+    ctx.line_to(x+offset, 0)
+    ctx.line_to(x, -heigth/2)
+    ctx.line_to(x+offset, -heigth)
+    ctx.line_to(x+duration, -heigth)
+    ctx.fill()
 
 
 surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
