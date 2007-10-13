@@ -13,11 +13,13 @@ if len(sys.argv) != 2:
 def draw_steps(ctx, signal):
     steps = [(0, 0), (30, 1), (40, 0), (60, 1)]
 
-    old_value = 0 
+    now    = 0
+    actual = 0
     for time, value in steps:
-        ctx.rel_line_to(time, 0)
-        ctx.rel_line_to(0, 10*(old_value - value))
-        old_value = value
+        now += time
+        ctx.line_to(now, -actual)
+        actual = 10*value
+        ctx.line_to(now, -actual)
     ctx.stroke()
 
 surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
@@ -40,8 +42,10 @@ for signal in v.signals.values():
 
 ctx.restore()
 for signal in v.signals.values():
-    ctx.move_to(100, 0)
+    ctx.save()
+    ctx.translate(100, 0)
     draw_steps(ctx, signal)
+    ctx.restore()
     ctx.translate(0, 20)
 
 surface.write_to_png('vcd.png')
