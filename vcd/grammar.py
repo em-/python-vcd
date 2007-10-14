@@ -21,7 +21,7 @@ section = Group(s('$') + Word(alphas)('name') + content)('section')
 unit      = s('1') + oneOf('s ms ns us ps fs')
 timescale = (s('$timescale') + unit + s('$end'))('timescale')
 
-scope   = Group(s('$scope module') + Word(alphanums)('module') + s('$end'))('scope')
+scope   = Group(s('$scope module') + Word(printables)('module') + s('$end'))('scope')
 upscope = Group(s('$upscope') + s(content))('upscope')
 
 enddefinitions = s('$enddefinitions' + content)
