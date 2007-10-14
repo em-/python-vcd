@@ -108,7 +108,7 @@ ctx.paint()
 
 v = Vcd(input)
 ctx.set_source_rgb (*text_color)
-ctx.translate(0, line_heigth/2)
+ctx.translate(0, line_heigth)
 ctx.save()
 for signal in v.signals.values():
     ctx.set_font_size(text_font_size)
