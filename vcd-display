@@ -109,7 +109,9 @@ def draw_grid(ctx, signals, total):
         ctx.fill()
         ctx.move_to(i * interval, 2*line_heigth/9)
         ctx.rel_line_to(0, 2*line_heigth/9 +line_heigth * len(signals))
+        ctx.set_dash([4, 3], 1)
         ctx.stroke()
+        ctx.set_dash([], 0)
 
     for i in range(5*total/1000000 +1):
         ctx.move_to(i * interval/5, 2*line_heigth/9)
