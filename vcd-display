@@ -125,7 +125,7 @@ def draw_grid(ctx, signals, total):
 
 
 
-surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
+surface = cairo.PSSurface (output, WIDTH, HEIGHT)
 ctx = cairo.Context(surface)
 
 ctx.set_source_rgb (1, 1, 1)
@@ -165,5 +165,3 @@ for signal in v.signals.values():
         draw_steps_register(ctx, signal, total)
     ctx.restore()
     ctx.translate(0, line_heigth)
-
-surface.write_to_png(output)
