@@ -19,12 +19,12 @@ default_stroke_color = (0.5, 1, 0.5)
 unknown_fill_color   = (1, 0.8, 0.8)
 unknown_stroke_color = (1, 0.5, 0.5)
 
-line_heigth = 20
-signal_heigth = 10
-signal_time_coeff = 100000
+line_heigth = 30
+signal_heigth = 15
+signal_time_coeff = 25000
 
-text_font_size = 11
-text_length = 100
+text_font_size = 15
+text_length = 150
 
 def process_steps(steps, total):
     result = []
