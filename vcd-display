@@ -24,6 +24,10 @@ if options.module:
 else:
     signals = v.signals
 
+if not signals:
+    print "error: no usable signal found"
+    sys.exit(1)
+
 text_color           = (0, 0, 0)
 default_fill_color   = (0.8, 1, 0.8)
 default_stroke_color = (0.5, 1, 0.5)
