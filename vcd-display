@@ -11,18 +11,29 @@ if len(sys.argv) != 3:
 input = sys.argv[1]
 output = sys.argv[2]
 
+v = Vcd(input)
+
 text_color           = (0, 0, 0)
 default_fill_color   = (0.8, 1, 0.8)
 default_stroke_color = (0.5, 1, 0.5)
 unknown_fill_color   = (1, 0.8, 0.8)
 unknown_stroke_color = (1, 0.5, 0.5)
 
+total = 0
+for signal in v.signals.values():
+    total = max([total] + [int(s[0]) for s in signal.steps])
+
 line_heigth = 30
 signal_heigth = 15
-signal_time_coeff = 25000
+signal_right_margin = 10
+
+WIDTH = 600
+HEIGHT = line_heigth * (len(v.signals) + 1)
 
 text_font_size = 15
 text_length = 150
+
+signal_time_coeff = total / (WIDTH - text_length - signal_right_margin)
 
 def process_steps(steps, total):
     result = []
@@ -122,11 +133,6 @@ def draw_grid(ctx, signals, total):
     ctx.stroke()
 
 
-v = Vcd(input)
-
-WIDTH = 600
-HEIGHT = line_heigth * (len(v.signals) + 1)
-
 surface = cairo.PSSurface (output, WIDTH, HEIGHT)
 ctx = cairo.Context(surface)
 
@@ -135,10 +141,6 @@ ctx.set_operator (cairo.OPERATOR_SOURCE)
 ctx.paint()
 
 ctx.set_source_rgb (*text_color)
-
-total = 0
-for signal in v.signals.values():
-    total = max([total] + [int(s[0]) for s in signal.steps])
 
 ctx.translate(0, line_heigth/3)
 ctx.save()
