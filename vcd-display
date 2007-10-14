@@ -19,6 +19,11 @@ output = args[1]
 
 v = Vcd(input)
 
+if options.module:
+    signals = [s for s in v.signals.values() if s.module == options.module]
+else:
+    signals = v.signals.values()
+
 text_color           = (0, 0, 0)
 default_fill_color   = (0.8, 1, 0.8)
 default_stroke_color = (0.5, 1, 0.5)
@@ -26,14 +31,14 @@ unknown_fill_color   = (1, 0.8, 0.8)
 unknown_stroke_color = (1, 0.5, 0.5)
 
 total = 0
-for signal in v.signals.values():
+for signal in signals:
     total = max([total] + [int(s[0]) for s in signal.steps])
 
 line_heigth = 30
 signal_heigth = 15
 
 WIDTH = 600
-HEIGHT = line_heigth * (len(v.signals) + 1)
+HEIGHT = line_heigth * (len(signals) + 1)
 
 text_font_size = 15
 text_length = 150
@@ -149,13 +154,13 @@ ctx.set_source_rgb (*text_color)
 
 ctx.translate(0, line_heigth/3)
 ctx.save()
-draw_grid(ctx, v.signals, total)
+draw_grid(ctx, signals, total)
 ctx.restore()
 
 
 ctx.translate(0, line_heigth)
 ctx.save()
-for signal in v.signals.values():
+for signal in signals:
     ctx.set_font_size(text_font_size)
     ctx.new_path()
     ctx.text_path(signal.reference)
@@ -164,7 +169,7 @@ for signal in v.signals.values():
 
 ctx.restore()
 
-for signal in v.signals.values():
+for signal in signals:
     ctx.save()
     ctx.translate(text_length, 0)
     if signal.size == 1:
