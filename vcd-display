@@ -2,14 +2,20 @@
 
 import sys
 import cairo
+from optparse import OptionParser
 from vcd.vcd import Vcd
 
-if len(sys.argv) != 3:
-    print "Usage: %s INPUT OUTPUT" % sys.argv[0]
-    sys.exit(2)
+parser = OptionParser()
+parser.usage = "%prog [OPTIONS] INPUT OUTPUT"
+parser.add_option("-m", "--module", action="store", type="string",
+                  dest="module",
+                  help="display only signals in the module scope")
+(options, args) = parser.parse_args()
+if len(args) < 2:
+    parser.error("not enough argument")
 
-input = sys.argv[1]
-output = sys.argv[2]
+input = args[0]
+output = args[1]
 
 v = Vcd(input)
 
