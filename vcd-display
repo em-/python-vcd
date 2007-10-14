@@ -108,6 +108,33 @@ ctx.paint()
 
 v = Vcd(input)
 ctx.set_source_rgb (*text_color)
+
+total = 0
+for signal in v.signals.values():
+    total = max([total] + [int(s[0]) for s in signal.steps])
+
+ctx.translate(0, line_heigth/3)
+ctx.save()
+ctx.translate(text_length, 0)
+ctx.set_font_size(text_font_size/2)
+interval = 1000000/signal_time_coeff
+
+for i in range(total/1000000 + 1):
+    ctx.move_to(i * interval, line_heigth/9)
+    ctx.text_path("%d ns" % i)
+    ctx.fill()
+
+for i in range(5*total/1000000 +1):
+    ctx.move_to(i * interval/5, 2*line_heigth/9)
+    ctx.rel_line_to(0, 2*line_heigth/9)
+    ctx.stroke()
+
+ctx.move_to(0, 2*line_heigth/9)
+ctx.rel_line_to(total/signal_time_coeff, 0)
+ctx.stroke()
+ctx.restore()
+
+
 ctx.translate(0, line_heigth)
 ctx.save()
 for signal in v.signals.values():
@@ -118,10 +145,6 @@ for signal in v.signals.values():
     ctx.translate(0, line_heigth)
 
 ctx.restore()
-
-total = 0
-for signal in v.signals.values():
-    total = max([total] + [int(s[0]) for s in signal.steps])
 
 for signal in v.signals.values():
     ctx.save()
