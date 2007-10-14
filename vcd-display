@@ -39,12 +39,12 @@ def process_steps(steps, total):
     result = []
     for i in range(len(steps)-1):
         value = steps[i][1]
-        duration = int(steps[i+1][0]) - int(steps[i][0])
+        duration = float(steps[i+1][0]) - int(steps[i][0])
         duration /= signal_time_coeff
         result.append((value, duration))
 
     value = steps[-1][1]
-    duration = total - int(steps[-1][0])
+    duration = total - float(steps[-1][0])
     duration /= signal_time_coeff
     result.append((value, duration))
     return result
@@ -111,7 +111,7 @@ def draw_grid(ctx, signals, total):
     ctx.translate(text_length, 0)
     ctx.set_font_size(text_font_size/2)
     ctx.set_line_width(0.1)
-    interval = 1000000/signal_time_coeff
+    interval = 1000000.0/signal_time_coeff
 
     for i in range(total/1000000 + 1):
         ctx.move_to(i * interval, line_heigth/9)
