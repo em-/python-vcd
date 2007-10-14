@@ -20,7 +20,8 @@ class Vcd(object):
     def __init__(self, filename):
         parse_tree = grammar.vcd.parseFile(filename)
 
-        self.signals = {}
+        self.signals = []
+        id_to_signal = {}
         scope = []
         for i in parse_tree:
             if not hasattr(i, 'getName'): continue
@@ -33,11 +34,12 @@ class Vcd(object):
                     current_scope = scope[-1]
                 else:
                     current_scope = None
-                self.signals[i.id] = Signal(i.type, int(i.size), i.name, current_scope)
+                self.signals.append(Signal(i.type, int(i.size), i.name, current_scope))
+                id_to_signal[i.id] = self.signals[-1]
 
         for i in parse_tree:
             if hasattr(i, 'getName') and i.getName() == 'step':
                 time = i.time
                 for j in i:
                     if hasattr(j, 'getName') and j.getName() == 'value':
-                        self.signals[j.id].step(time, j[0])
+                        id_to_signal[j.id].step(time, j[0])

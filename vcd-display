@@ -20,9 +20,9 @@ output = args[1]
 v = Vcd(input)
 
 if options.module:
-    signals = [s for s in v.signals.values() if s.module == options.module]
+    signals = [s for s in v.signals if s.module == options.module]
 else:
-    signals = v.signals.values()
+    signals = v.signals
 
 text_color           = (0, 0, 0)
 default_fill_color   = (0.8, 1, 0.8)
