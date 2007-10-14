@@ -101,6 +101,7 @@ def draw_steps_register(ctx, signal, total):
 def draw_grid(ctx, signals, total):
     ctx.translate(text_length, 0)
     ctx.set_font_size(text_font_size/2)
+    ctx.set_line_width(0.1)
     interval = 1000000/signal_time_coeff
 
     for i in range(total/1000000 + 1):
