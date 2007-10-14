@@ -98,6 +98,30 @@ def draw_steps_register(ctx, signal, total):
     ctx.line_to(x+duration, -signal_heigth)
     paint(ctx)
 
+def draw_grid(ctx, signals, total):
+    ctx.translate(text_length, 0)
+    ctx.set_font_size(text_font_size/2)
+    interval = 1000000/signal_time_coeff
+
+    for i in range(total/1000000 + 1):
+        ctx.move_to(i * interval, line_heigth/9)
+        ctx.text_path("%d ns" % i)
+        ctx.fill()
+        ctx.move_to(i * interval, 2*line_heigth/9)
+        ctx.rel_line_to(0, 2*line_heigth/9 +line_heigth * len(signals))
+        ctx.stroke()
+
+    for i in range(5*total/1000000 +1):
+        ctx.move_to(i * interval/5, 2*line_heigth/9)
+        ctx.rel_line_to(0, 2*line_heigth/9)
+        ctx.stroke()
+
+    ctx.move_to(0, 2*line_heigth/9)
+    ctx.rel_line_to(total/signal_time_coeff, 0)
+    ctx.stroke()
+
+
+
 
 surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
 ctx = cairo.Context(surface)
@@ -115,26 +139,7 @@ for signal in v.signals.values():
 
 ctx.translate(0, line_heigth/3)
 ctx.save()
-ctx.translate(text_length, 0)
-ctx.set_font_size(text_font_size/2)
-interval = 1000000/signal_time_coeff
-
-for i in range(total/1000000 + 1):
-    ctx.move_to(i * interval, line_heigth/9)
-    ctx.text_path("%d ns" % i)
-    ctx.fill()
-    ctx.move_to(i * interval, 2*line_heigth/9)
-    ctx.rel_line_to(0, 2*line_heigth/9 +line_heigth * len(v.signals))
-    ctx.stroke()
-
-for i in range(5*total/1000000 +1):
-    ctx.move_to(i * interval/5, 2*line_heigth/9)
-    ctx.rel_line_to(0, 2*line_heigth/9)
-    ctx.stroke()
-
-ctx.move_to(0, 2*line_heigth/9)
-ctx.rel_line_to(total/signal_time_coeff, 0)
-ctx.stroke()
+draw_grid(ctx, v.signals, total)
 ctx.restore()
 
 
