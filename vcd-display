@@ -13,6 +13,12 @@ if len(sys.argv) != 3:
 input = sys.argv[1]
 output = sys.argv[2]
 
+text_color           = (0, 0, 0)
+default_fill_color   = (0.8, 1, 0.8)
+default_stroke_color = (0.5, 1, 0.5)
+unknown_fill_color   = (1, 0.8, 0.8)
+unknown_stroke_color = (1, 0.5, 0.5)
+
 def process_steps(steps, total):
     result = []
     for i in range(len(steps)-1):
@@ -33,13 +39,16 @@ def draw_steps_single(ctx, signal, total):
     ctx.move_to(0,0)
     for value, duration in process_steps(signal.steps, total):
         if value in ('0', '1'):
+            ctx.set_source_rgb (*default_stroke_color)
             ctx.line_to(now, -10*int(value))
             ctx.rel_line_to(duration, 0)
         else:
             ctx.stroke()
+            ctx.set_source_rgb (*unknown_fill_color)
             x, y = ctx.get_current_point()
             ctx.rectangle(x, 0, duration, -10)
             ctx.fill()
+            ctx.set_source_rgb (*unknown_stroke_color)
             ctx.move_to(x, -10)
             ctx.rel_line_to(duration, 0)
             ctx.move_to(x, 0)
@@ -61,7 +70,16 @@ def draw_steps_register(ctx, signal, total):
         ctx.line_to(x+duration-offset, 0)
         ctx.line_to(x+offset, 0)
         ctx.close_path()
-        ctx.fill()
+        if 'U' in value:
+            ctx.set_source_rgb (*unknown_fill_color)
+            ctx.fill_preserve()
+            ctx.set_source_rgb (*unknown_stroke_color)
+            ctx.stroke()
+        else:
+            ctx.set_source_rgb (*default_fill_color)
+            ctx.fill_preserve()
+            ctx.set_source_rgb (*default_stroke_color)
+            ctx.stroke()
         ctx.move_to(x+duration, -heigth/2)
     value, duration = steps[-1]
     x, y = ctx.get_current_point()
@@ -70,7 +88,16 @@ def draw_steps_register(ctx, signal, total):
     ctx.line_to(x, -heigth/2)
     ctx.line_to(x+offset, -heigth)
     ctx.line_to(x+duration, -heigth)
-    ctx.fill()
+    if 'U' in value:
+        ctx.set_source_rgb (*unknown_fill_color)
+        ctx.fill_preserve()
+        ctx.set_source_rgb (*unknown_stroke_color)
+        ctx.stroke()
+    else:
+        ctx.set_source_rgb (*default_fill_color)
+        ctx.fill_preserve()
+        ctx.set_source_rgb (*default_stroke_color)
+        ctx.stroke()
 
 
 surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
@@ -81,7 +108,7 @@ ctx.set_operator (cairo.OPERATOR_SOURCE)
 ctx.paint()
 
 v = Vcd(input)
-ctx.set_source_rgb (0, 0, 1)
+ctx.set_source_rgb (*text_color)
 ctx.translate(0, 10)
 ctx.save()
 for signal in v.signals.values():
