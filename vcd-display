@@ -25,7 +25,6 @@ for signal in v.signals.values():
 
 line_heigth = 30
 signal_heigth = 15
-signal_right_margin = 10
 
 WIDTH = 600
 HEIGHT = line_heigth * (len(v.signals) + 1)
@@ -33,7 +32,7 @@ HEIGHT = line_heigth * (len(v.signals) + 1)
 text_font_size = 15
 text_length = 150
 
-signal_time_coeff = total / (WIDTH - text_length - signal_right_margin)
+signal_time_coeff = total / (WIDTH - text_length)
 
 def process_steps(steps, total):
     result = []
