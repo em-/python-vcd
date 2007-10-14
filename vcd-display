@@ -4,8 +4,6 @@ import sys
 import cairo
 from vcd.vcd import Vcd
 
-WIDTH, HEIGHT = 600, 600
-
 if len(sys.argv) != 3:
     print "Usage: %s INPUT OUTPUT" % sys.argv[0]
     sys.exit(2)
@@ -124,7 +122,10 @@ def draw_grid(ctx, signals, total):
     ctx.stroke()
 
 
+v = Vcd(input)
 
+WIDTH = 600
+HEIGHT = line_heigth * (len(v.signals) + 1)
 
 surface = cairo.PSSurface (output, WIDTH, HEIGHT)
 ctx = cairo.Context(surface)
@@ -133,7 +134,6 @@ ctx.set_source_rgb (1, 1, 1)
 ctx.set_operator (cairo.OPERATOR_SOURCE)
 ctx.paint()
 
-v = Vcd(input)
 ctx.set_source_rgb (*text_color)
 
 total = 0
