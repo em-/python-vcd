@@ -123,6 +123,9 @@ for i in range(total/1000000 + 1):
     ctx.move_to(i * interval, line_heigth/9)
     ctx.text_path("%d ns" % i)
     ctx.fill()
+    ctx.move_to(i * interval, 2*line_heigth/9)
+    ctx.rel_line_to(0, 2*line_heigth/9 +line_heigth * len(v.signals))
+    ctx.stroke()
 
 for i in range(5*total/1000000 +1):
     ctx.move_to(i * interval/5, 2*line_heigth/9)
