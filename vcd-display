@@ -19,17 +19,24 @@ default_stroke_color = (0.5, 1, 0.5)
 unknown_fill_color   = (1, 0.8, 0.8)
 unknown_stroke_color = (1, 0.5, 0.5)
 
+line_heigth = 20
+signal_heigth = 10
+signal_time_coeff = 100000
+
+text_font_size = 11
+text_length = 100
+
 def process_steps(steps, total):
     result = []
     for i in range(len(steps)-1):
         value = steps[i][1]
         duration = int(steps[i+1][0]) - int(steps[i][0])
-        duration /= 100000
+        duration /= signal_time_coeff
         result.append((value, duration))
 
     value = steps[-1][1]
     duration = total - int(steps[-1][0])
-    duration /= 100000
+    duration /= signal_time_coeff
     result.append((value, duration))
     return result
 
@@ -40,16 +47,16 @@ def draw_steps_single(ctx, signal, total):
     for value, duration in process_steps(signal.steps, total):
         if value in ('0', '1'):
             ctx.set_source_rgb (*default_stroke_color)
-            ctx.line_to(now, -10*int(value))
+            ctx.line_to(now, -signal_heigth*int(value))
             ctx.rel_line_to(duration, 0)
         else:
             ctx.stroke()
             ctx.set_source_rgb (*unknown_fill_color)
             x, y = ctx.get_current_point()
-            ctx.rectangle(x, 0, duration, -10)
+            ctx.rectangle(x, 0, duration, -signal_heigth)
             ctx.fill()
             ctx.set_source_rgb (*unknown_stroke_color)
-            ctx.move_to(x, -10)
+            ctx.move_to(x, -signal_heigth)
             ctx.rel_line_to(duration, 0)
             ctx.move_to(x, 0)
             ctx.rel_line_to(duration, 0)
@@ -69,27 +76,26 @@ def draw_steps_register(ctx, signal, total):
             ctx.fill_preserve()
             ctx.set_source_rgb (*default_stroke_color)
             ctx.stroke()
-    offset = 2.5
-    heigth = 10
-    ctx.move_to(0, -heigth/2)
+    offset = signal_heigth/4
+    ctx.move_to(0, -signal_heigth/2)
     steps = process_steps(signal.steps, total)
     for value, duration in steps[:-1]:
         x, y = ctx.get_current_point()
-        ctx.line_to(x+offset, -heigth)
-        ctx.line_to(x+duration-offset, -heigth)
-        ctx.line_to(x+duration, -heigth/2)
+        ctx.line_to(x+offset, -signal_heigth)
+        ctx.line_to(x+duration-offset, -signal_heigth)
+        ctx.line_to(x+duration, -signal_heigth/2)
         ctx.line_to(x+duration-offset, 0)
         ctx.line_to(x+offset, 0)
         ctx.close_path()
         paint(ctx)
-        ctx.move_to(x+duration, -heigth/2)
+        ctx.move_to(x+duration, -signal_heigth/2)
     value, duration = steps[-1]
     x, y = ctx.get_current_point()
     ctx.move_to(x+duration, 0)
     ctx.line_to(x+offset, 0)
-    ctx.line_to(x, -heigth/2)
-    ctx.line_to(x+offset, -heigth)
-    ctx.line_to(x+duration, -heigth)
+    ctx.line_to(x, -signal_heigth/2)
+    ctx.line_to(x+offset, -signal_heigth)
+    ctx.line_to(x+duration, -signal_heigth)
     paint(ctx)
 
 
@@ -102,14 +108,14 @@ ctx.paint()
 
 v = Vcd(input)
 ctx.set_source_rgb (*text_color)
-ctx.translate(0, 10)
+ctx.translate(0, line_heigth/2)
 ctx.save()
 for signal in v.signals.values():
-    ctx.set_font_size(11)
+    ctx.set_font_size(text_font_size)
     ctx.new_path()
     ctx.text_path(signal.reference)
     ctx.fill()
-    ctx.translate(0, 20)
+    ctx.translate(0, line_heigth)
 
 ctx.restore()
 
@@ -119,12 +125,12 @@ for signal in v.signals.values():
 
 for signal in v.signals.values():
     ctx.save()
-    ctx.translate(100, 0)
+    ctx.translate(text_length, 0)
     if signal.size == 1:
         draw_steps_single(ctx, signal, total)
     else:
         draw_steps_register(ctx, signal, total)
     ctx.restore()
-    ctx.translate(0, 20)
+    ctx.translate(0, line_heigth)
 
 surface.write_to_png(output)
