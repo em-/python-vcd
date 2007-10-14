@@ -58,6 +58,17 @@ def draw_steps_single(ctx, signal, total):
     ctx.stroke()
 
 def draw_steps_register(ctx, signal, total):
+    def paint(ctx):
+        if 'U' in value:
+            ctx.set_source_rgb (*unknown_fill_color)
+            ctx.fill_preserve()
+            ctx.set_source_rgb (*unknown_stroke_color)
+            ctx.stroke()
+        else:
+            ctx.set_source_rgb (*default_fill_color)
+            ctx.fill_preserve()
+            ctx.set_source_rgb (*default_stroke_color)
+            ctx.stroke()
     offset = 2.5
     heigth = 10
     ctx.move_to(0, -heigth/2)
@@ -70,16 +81,7 @@ def draw_steps_register(ctx, signal, total):
         ctx.line_to(x+duration-offset, 0)
         ctx.line_to(x+offset, 0)
         ctx.close_path()
-        if 'U' in value:
-            ctx.set_source_rgb (*unknown_fill_color)
-            ctx.fill_preserve()
-            ctx.set_source_rgb (*unknown_stroke_color)
-            ctx.stroke()
-        else:
-            ctx.set_source_rgb (*default_fill_color)
-            ctx.fill_preserve()
-            ctx.set_source_rgb (*default_stroke_color)
-            ctx.stroke()
+        paint(ctx)
         ctx.move_to(x+duration, -heigth/2)
     value, duration = steps[-1]
     x, y = ctx.get_current_point()
@@ -88,16 +90,7 @@ def draw_steps_register(ctx, signal, total):
     ctx.line_to(x, -heigth/2)
     ctx.line_to(x+offset, -heigth)
     ctx.line_to(x+duration, -heigth)
-    if 'U' in value:
-        ctx.set_source_rgb (*unknown_fill_color)
-        ctx.fill_preserve()
-        ctx.set_source_rgb (*unknown_stroke_color)
-        ctx.stroke()
-    else:
-        ctx.set_source_rgb (*default_fill_color)
-        ctx.fill_preserve()
-        ctx.set_source_rgb (*default_stroke_color)
-        ctx.stroke()
+    paint(ctx)
 
 
 surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
