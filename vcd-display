@@ -23,11 +23,9 @@ output = args[1]
 
 v = Vcd(input)
 
+signals = v.signals
 if options.module:
-    signals = [s for s in v.signals if s.module == options.module]
-else:
-    signals = v.signals
-
+    signals = [s for s in signals if s.module == options.module]
 if options.exclude:
     exclude = re.compile(options.exclude)
     signals = [s for s in signals if not exclude.match(s.reference)]
