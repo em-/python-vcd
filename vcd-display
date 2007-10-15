@@ -100,11 +100,11 @@ def draw_steps_register(ctx, signal, total):
             ctx.set_source_rgb (*default_stroke_color)
             ctx.stroke()
     ctx.set_font_size(text_font_size/2)
-    offset = signal_heigth/4
     ctx.move_to(0, -signal_heigth/2)
     steps = process_steps(signal.steps, total)
     for value, duration in steps[:-1]:
         x, y = ctx.get_current_point()
+        offset = min(signal_heigth/4, duration/2)
         ctx.line_to(x+offset, -signal_heigth)
         ctx.line_to(x+duration-offset, -signal_heigth)
         ctx.line_to(x+duration, -signal_heigth/2)
@@ -119,6 +119,7 @@ def draw_steps_register(ctx, signal, total):
         ctx.move_to(x+duration, -signal_heigth/2)
     value, duration = steps[-1]
     x, y = ctx.get_current_point()
+    offset = min(signal_heigth/4, duration/2)
     ctx.move_to(x+duration, 0)
     ctx.line_to(x+offset, 0)
     ctx.line_to(x, -signal_heigth/2)
