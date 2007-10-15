@@ -2,6 +2,7 @@
 
 import sys
 import cairo
+import re
 from optparse import OptionParser
 from vcd.vcd import Vcd
 
@@ -10,6 +11,9 @@ parser.usage = "%prog [OPTIONS] INPUT OUTPUT"
 parser.add_option("-m", "--module", action="store", type="string",
                   dest="module",
                   help="display only signals in the module scope")
+parser.add_option("-X", "--exclude", action="store", type="string",
+                  dest="exclude",
+                  help="do not display signals which match the regex")
 (options, args) = parser.parse_args()
 if len(args) < 2:
     parser.error("not enough argument")
@@ -23,6 +27,10 @@ if options.module:
     signals = [s for s in v.signals if s.module == options.module]
 else:
     signals = v.signals
+
+if options.exclude:
+    exclude = re.compile(options.exclude)
+    signals = [s for s in signals if not exclude.match(s.reference)]
 
 if not signals:
     print "error: no usable signal found"
