@@ -99,6 +99,7 @@ def draw_steps_register(ctx, signal, total):
             ctx.fill_preserve()
             ctx.set_source_rgb (*default_stroke_color)
             ctx.stroke()
+    ctx.set_font_size(text_font_size/2)
     offset = signal_heigth/4
     ctx.move_to(0, -signal_heigth/2)
     steps = process_steps(signal.steps, total)
@@ -111,6 +112,10 @@ def draw_steps_register(ctx, signal, total):
         ctx.line_to(x+offset, 0)
         ctx.close_path()
         paint(ctx)
+        ctx.move_to(x+line_heigth/9, -line_heigth/9)
+        ctx.text_path(value[1:])
+        ctx.set_source_rgb (*text_color)
+        ctx.fill()
         ctx.move_to(x+duration, -signal_heigth/2)
     value, duration = steps[-1]
     x, y = ctx.get_current_point()
@@ -120,6 +125,10 @@ def draw_steps_register(ctx, signal, total):
     ctx.line_to(x+offset, -signal_heigth)
     ctx.line_to(x+duration, -signal_heigth)
     paint(ctx)
+    ctx.move_to(x+line_heigth/9, -line_heigth/9)
+    ctx.text_path(value[1:])
+    ctx.set_source_rgb (*text_color)
+    ctx.fill()
 
 def draw_grid(ctx, signals, total):
     ctx.translate(text_length, 0)
