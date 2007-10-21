@@ -39,6 +39,8 @@ default_fill_color   = (0.8, 1, 0.8)
 default_stroke_color = (0.5, 1, 0.5)
 unknown_fill_color   = (1, 0.8, 0.8)
 unknown_stroke_color = (1, 0.5, 0.5)
+conflict_fill_color  = (1, 1, 0.6)
+conflict_stroke_color = (1, 0.8, 0)
 
 total = 0
 for signal in signals:
@@ -82,10 +84,16 @@ def draw_steps_single(ctx, signal, total):
         else:
             x, y = ctx.get_current_point()
             ctx.stroke()
-            ctx.set_source_rgb (*unknown_fill_color)
+            if value == 'X':
+                ctx.set_source_rgb (*conflict_fill_color)
+            else:
+                ctx.set_source_rgb (*unknown_fill_color)
             ctx.rectangle(x, 0, duration, -signal_heigth)
             ctx.fill()
-            ctx.set_source_rgb (*unknown_stroke_color)
+            if value == 'X':
+                ctx.set_source_rgb (*conflict_stroke_color)
+            else:
+                ctx.set_source_rgb (*unknown_stroke_color)
             ctx.move_to(x, -signal_heigth)
             ctx.rel_line_to(duration, 0)
             ctx.move_to(x, 0)
