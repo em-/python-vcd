@@ -80,9 +80,9 @@ def draw_steps_single(ctx, signal, total):
             ctx.line_to(now, -signal_heigth*int(value))
             ctx.rel_line_to(duration, 0)
         else:
+            x, y = ctx.get_current_point()
             ctx.stroke()
             ctx.set_source_rgb (*unknown_fill_color)
-            x, y = ctx.get_current_point()
             ctx.rectangle(x, 0, duration, -signal_heigth)
             ctx.fill()
             ctx.set_source_rgb (*unknown_stroke_color)
